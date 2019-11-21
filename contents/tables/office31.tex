@@ -1,0 +1,47 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+
+\newcommand\iw{0.0}
+\newcommand\cw{0.05}
+
+\begin{table*}[!htb]
+    \renewcommand{\arraystretch}{1.2}
+    \caption{Accuracy(\%) of each method with 10 shared class on Office-31. }
+    \label{table: exp on office31}
+
+    \centering
+    \small
+    \begin{tabularx}{0.95\textwidth}{r Y@{\hskip \iw in}Y Y@{\hskip \iw in}Y Y@{\hskip \iw in}Y Y@{\hskip \iw in}Y Y@{\hskip \iw in}Y Y@{\hskip \iw in}Y >{\itshape}Y@{\hskip \iw in}>{\itshape}Y}
+    % \begin{tabularx}{0.95\textwidth}{r XX XX XX XX XX XX >{\itshape}Y>{\itshape}Y}
+        \toprule[0.8pt]
+        \multicolumn{1}{c}{\multirow{2}{*}{Method}} & \multicolumn{14}{c}{All Class Accuracy(\textbf{OS}) and Known Class Accuracy(\textbf{OS*}) on Office31}                                                                                                                                                                                                                                                                                                                           \\ \cmidrule[0.1pt]{2-15}
+
+        \multicolumn{1}{c}{}                        & \multicolumn{2}{c}{A $\to$ D}                                 & \multicolumn{2}{c}{A $\to$ W} & \multicolumn{2}{c}{D $\to$ A} & \multicolumn{2}{c}{D $\to$ W} & \multicolumn{2}{c}{W $\to$ A} & \multicolumn{2}{c}{W $\to$ D} & \multicolumn{2}{c}{\textit{AVG}}                                                                                                                                  \\
+        \hline
+        \multicolumn{15}{c}{\textit{results in CSDA setting}}  \\
+        \hline
+        GRL \methodyear{[JMLR, 2016]} &-& 91.3&-& 91.8&-& 90.1&-& 98.6&-& 89.6&-& 99.7&-&93.5\\
+        MMD \methodyear{[NIPS, 2007]} &-& 90.3&-&91.0&-&89.1&-&98.7&-&88.2&-&99.4&-&92.7\\
+        \hline
+        \multicolumn{15}{c}{\textit{results in OSDA setting with unkonw class in the source domain \cite{OpensetsDA}}}                                                                                                                                                                                                                                                                                                                                                            \\
+        \hline
+        GRL \methodyear{[JMLR, 2016]}                                        & 78.3                                                        & 77.3                        & 75.9                        & 73.8                        & 57.6                        & 54.1                        & 89.8                             & 88.9                  & 64.0       & 61.8                  & 98.7       & 98.0                  & 77.4 & 75.7                  \\
+        ATI-$\lambda$ \methodyear{[ICCV, 2017]}                             & 79.8                                                        & 79.2                        & 77.6                        & 76.5                        & 71.3                        & 70.0                        & 93.5                             & 93.2                  & 76.7       & 76.5                  & 98.3       & 99.2                  & 82.9 & 82.4                  \\
+        \hline
+        \multicolumn{15}{c}{\textit{results in OSDA without unkonw class in the source domain \cite{OpensetDA-bp}}}                                                                                                                                                                                                                                                                                                                                                         \\
+        \hline
+        GRL \methodyear{[JMLR, 2016]}                                    & 40.8                                                        & 35.6                        & 31.0                        & 24.3                        & 10.4                        & 1.5                         & 33.6                             & 27.3                  & 11.5       & 2.7                   & 49.7       & 44.8                  & 29.5 & 22.7                  \\
+        MMD \methodyear{[NIPS, 2007]}                                    & 47.8                                                        & 44.3                        & 41.5                        & 36.2                        & 9.9                         & 0.9                         & 34.4                             & 28.4                  & 11.5       & 2.7                   & 62.0       & 58.5                  & 34.5 & 28.5                  \\
+        OSVM \methodyear{[ECCV, 2014]}                                      & 59.6                                                        & 59.1                        & 57.1                        & 55.0                        & 14.3                        & 5.9                         & 44.1                             & 39.3                  & 13.0       & 4.5                   & 62.5       & 59.2                  & 40.6 & 37.1                  \\
+        ATI-$\lambda$ \methodyear{[ICCV, 2017]}                          & 72.0                                                        & \multicolumn{1}{c}{-}       & 65.3                        & \multicolumn{1}{c}{-}       & 66.4                        & \multicolumn{1}{c}{-}       & 82.2                             & \multicolumn{1}{c}{-} & 71.6       & \multicolumn{1}{c}{-} & 92.7       & \multicolumn{1}{c}{-} & 75.0 & \multicolumn{1}{c}{-} \\
+        OSBP \methodyear{[ECCV, 2018]}                                       & 76.6                                                        & 76.4                        & 70.1                        & 69.1                        & 62.5                        & 62.3                        & 94.4                             & 94.6                  & \emmax{82.3} & \emmax{82.2}            & 96.8       & 96.9                  & 80.4 & 80.3                  \\
+        \hline
+        ThDAN-m-dy                                      & 75.3                                                        & 75.5                        & 76.2                        & 76.0                        & 69.8                        & 69.8                        & 94.4                             & 94.4                  & 72.6       & 72.8                  & 96.5       & 96.9                  & 80.8 & 80.9                  \\
+        ThDAN-m                                    & 77.8                                                        & 77.8                        & 77.5                        & 77.3                        & 71.3                        & 71.0                        & \emmax{95.0}                       & 94.8            & 74.1       & 74.5                  & \emmax{97.2} & \emmax{97.4}            & 82.1 & 82.1                  \\
+        ThDAN                                 & \emmax{80.5}                                                  & \emmax{80.5}                  & \emmax{81.2}                  & \emmax{81.2}                  & \emmax{76.0}                  & \emmax{75.9}                  & \emmax{95.0}                             & \emmax{95.0}                  & 77.5       & 77.6                  & 96.8       & 97.0                  & \emmax{84.4} & \emmax{84.4}                  \\
+        \bottomrule[0.8pt]
+    \end{tabularx}
+\end{table*}
+
+% GRL&-& 91.3&-& 91.8&-& 90.1&-& 98.6&-& 89.6&-& 99.7\\
+% MMD&-& 91.9&-&92.3&-&89.0&-&98.7&-&88.2&-&99.7\\

@@ -1,0 +1,51 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+
+% \newcommand\iw{0.0}
+% \newcommand\cw{0.05}
+
+\begin{table*}[!t]
+    \renewcommand{\arraystretch}{1.3}
+    \caption{Accuracy (\%) of each method with 20 and 40 shared class on Office-Home. }
+    \label{table: exp on OfficeHome}
+    \small
+    \centering
+    \begin{tabularx}{0.95\textwidth}{r Y Y Y Y Y Y Y Y Y Y Y Y >{\itshape}Y }
+        \toprule[0.8pt]
+        \multicolumn{1}{c}{\multirow{2}{*}{Method}} & \multicolumn{13}{c}{All Class Accuracy(\textbf{OS}) on Office-Home}                                                                                                                                                                                     \\
+        \cmidrule[0.1pt]{2-14}
+        \multicolumn{1}{c}{}                        & Ar$\to$Cl                                            & Ar$\to$Pr    & Ar$\to$Rw    & Cl$\to$Ar    & Cl$\to$Pr    & Cl$\to$Rw    & Pr$\to$Ar    & Pr$\to$Cl    & Pr$\to$Rw    & Rw$\to$Al    & Rw$\to$Cl    & Rw$\to$Pr    & Avg          \\
+
+        \hline
+        \multicolumn{14}{c}{\textit{results with 20 shared classes}}                                                                                                                                                                                                                                                                                                                                                         \\
+        \hline
+        OSVM \methodyear{[ECCV, 2014]}                                        & 32.9                                                 & 30.1         & 42.2         & 35.6         & 29.9         & 38.7         & 37.8         & 31.6         & 41.9         & 39.3         & 33.4         & 40.5         & 36.1         \\
+        MMD \methodyear{[NIPS, 2007]}                                    & 28.5                                                 & 26.2         & 33.6         & 35.9         & 28.1         & 30.3         & 30.5         & 26.7         & 37.8         & 47.0         & 31.3         & 38.2         & 32.8         \\
+        GRL  \methodyear{[JMLR, 2016]}                                  & 23.5                                                 & 25.7         & 31.1         & 30.4         & 31.3         & 26.9         & 27.4         & 19.8         & 35.6         & 33.5         & 28.4         & 31.9         & 28.7         \\
+        ATI-$\lambda$ \methodyear{[ICCV, 2017]}                        & 48.1                                                 & 49.2         & 55.7         & 44.8         & 52.1         & 59.4         & 43.7         & 41.6         & 60.9         & 43.4         & 45.1         & 57.9         & 50.1         \\
+        OSBP \methodyear{[ECCV, 2018]} & 53.1& 55.6& 62.7& 50.7& 58.5& 63& 50.5& 48.1& 63.3& 54.2& 51.7& 62.8&56.1\\
+
+        \hline
+        ThDAN-dy &54.3&56.1&64.8&51.6&59.7&63.1&54.6&55.0&63.2&57.4&53.9&66.1&58.6\\
+
+        ThDAN & \emmax{59.8}& \emmax{61.4}& \emmax{68.4}& \emmax{56.7}& \emmax{61.7}& \emmax{67.8}& \emmax{56.0}& \emmax{57.6}& \emmax{67.8}& \emmax{58.9}& \emmax{59.5}& \emmax{68.6}& \emmax{62.0} \\
+        \hline
+        \multicolumn{14}{c}{\textit{results with 40 shared classes}}                                                                                                                                                                                                                                                                                                                                                         \\
+        \hline
+        OSBP \methodyear{[ECCV, 2018]} & 44.2& 46.3& 51.0& 41.8& 47.5& 51.9& 42.4& 40.7& 51.1& 44.4& 42.8& 52.2&46.3\\
+
+        \hline
+        ThDAN-dy &48.7&49.2&52.6&43.0&55.1&52.0&45.3&43.7&51.6&45.8&46.0&53.4&48.8\\
+
+        ThDAN & \emmax{50.1}& \emmax{51.8}& \emmax{59.4}& \emmax{47.2}& \emmax{52.3}& \emmax{56.2}& \emmax{49.5}& \emmax{45.1}& \emmax{58.9}& \emmax{47.3}& \emmax{50.3}& \emmax{60.6}& \emmax{52.4} \\
+        
+        \bottomrule[0.8pt]
+    \end{tabularx}
+\end{table*}
+
+
+
+
+
+
+

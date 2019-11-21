@@ -1,0 +1,33 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+
+% \newcommand\iw{0.05}
+% \newcommand\cw{0.05}
+% \renewcommand\tabularxcolumn[1]{m{#1}}
+\newcommand\emmax[1]{\textcolor{red}{\textbf{#1}}}
+\newcommand\methodyear[1]{\textcolor{blue}{#1}}
+\newcommand\Tstrut{\rule{0pt}{2.6ex}}
+\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}}
+
+\begin{table*}[htb]
+    \renewcommand{\arraystretch}{1.3}
+    \caption{Accuracy (\%) of each method with 6 shared class on VisDA. }
+    \label{table: exp on visDA}
+    \centering
+    \small
+    \begin{tabularx}{0.95\textwidth}{r Y Y Y Y Y Y Y >{\itshape}Y >{\itshape}Y }
+        \toprule[0.8pt]
+        \multicolumn{1}{c}{\multirow{2}{*}{Method}} & \multicolumn{9}{c}{  class-wise accuracy on VisDA}                                                                       \\ \cmidrule[0.1pt]{2-10}
+        \multicolumn{1}{c}{}                        & Bcycle                                             & Bus  & Car  & Mcycle & Train & Truck & Unkown & Avg.All & Avg.Known \\
+        \hline
+        OSVM  \methodyear{[ECCV, 2014]}                                      & 4.8                                                & 45.0 & 44.2 & 43.5   & 59.0  & 10.5  & 57.4   & 37.8    & 34.5      \\
+        MMD  \methodyear{[NIPS, 2007]}                                  & 0.2                                                & 30.9 & 49.1 & 54.8   & 56.1  & 8.1   & 61.3   & 37.2    & 33.2      \\
+        GRL  \methodyear{[JMLR, 2016]}                                   & 9.1                                                & 50.5 & 53.9 & 79.8   & 69.0  & 8.1   & 42.5   & 44.7    & 45.1      \\
+        OSBP  \methodyear{[ECCV, 2018]}                                       & 48.0                                               & 67.4 & 39.2 & 80.2   & 69.4  & \emmax{24.9}  & 80.3   & 58.5    & 54.8      \\
+        \hline
+        ThDAN-dy                                    & 52.6                                               & 69.5 & 58.8 & 83.1   & 72.3  & 12.3  & 84.5   & 61.8    & 58.1      \\
+        ThDAN                                 & \emmax{55.2}                                               & \emmax{70.8} & \emmax{61.4} & \emmax{85.6}   & \emmax{74.8}  & 10.0  & \emmax{88.8}   & \emmax{63.8}    & \emmax{59.6}      \\
+        \bottomrule[0.8pt]
+    \end{tabularx}
+\end{table*}
+

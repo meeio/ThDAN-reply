@@ -1,0 +1,44 @@
+\subsection{Close Set Domain Adaptation}
+\textit{Close Set Domain Adaptation \textbf{(CSDA)}} assumes an identical label space is shared across domains and focuses on transferring knowledge from the source domain to the target domain to reduce the domain shift between domains. 
+
+A typical approach for domain adaptation is minimizing statistical distances between feature distributions. 
+There are several methods proposed to match statistic moment, including 
+\textit{Maximum Mean Discrepancy (MMD)} \cite{DeepDomainConfusion,long2016unsupervised,long2017deep,DeepAdaptationNetworks,Elsevier-UDAFeature}, 
+\textit{Central Moment Discrepancy (CMD)} \cite{zellinger2017central,pan2016domain}, 
+\textit{Wassterstein distance} \cite{courty2016optimal}, 
+and \textit{CORrelation ALignment (CORAL)} \cite{DeepCoral}. 
+Meanwhile, with significant advances made in Generative Adversarial Nets \cite{goodfellow2014generative}, methods that based on domain adversarial learning aro proposed. \textit{Domain Adversarial Neural Network (DANN)} \cite{DomainAdversrialNetwork} and \textit{Adversarial Discriminative Domain Adaptation (ADDA)}  train a domain classifier to discriminate features from source and target domains, then force the feature extractor to confuse the domain classifier so as to generate domain-invariant features. 
+\textit{Joint Adaptation Network (JAN)} combines adversarial learning with MMD by aligning the joint distributions of multiple domain-specific layers across domains. 
+Also, there are approaches use \textit{Batch Normalization} statistics \cite{li2016revisiting,cariucci2017autodial} to align the source and target distributions to a canonical one. 
+
+Another approach for CSDA is to use generative models to synthesize labeled target samples as data augmentation and then match domains in both pixel and feature levels \cite{bousmalis2017unsupervised,wang2018high,creswell2018generative,Elsevier-SBADAGAN,xiao2018semantic}. 
+The \textit{Cycle-Consistent Generative Adversarial Network (CycleGAN)} proposed in \cite{li2018unsupervised} transforms source images into target-like images and vice versa with a cycle consistent loss, then train the classifiers for each domain respectively with source images and transformed images. 
+Due to the great performance of CycleGAN in image translation, domain adaptation methods based on CycleGAN \cite{russo2018source,hoffman2017cycada} have been attractive recently. 
+
+The methods proposed for CSDA provide a rich toolbox for generalization of domain adaptation. 
+However, the assumption of CSDA can hardly be verified in practice due to lack of target label information. 
+More practically, target domain contains unknown classes different from the known ones in the source domain. 
+
+
+\subsection{Open set Domain Adaptation}
+\textit{Open Set Domain Adaption \textbf{OSDA}} introduced in \cite{OpensetsDA} assumes both domains contain unknown classes that do not included in the label space of each other. 
+The proposed algorithm, called \textit{Assign-and-Transform-Iteratively \textbf{(ATI)}}, maps target samples to source classes and train SVMs for final classification. 
+And \cite{OpensetDA-bp, PDA-sep} further modify the openset domain adaption by demanding no unknown classes of the source domain. 
+\textit{Open Set Back-Propagation \textbf{(OSBP)}} they proposed trains a domain adversarial network to output a class-sensitive probability for target samples, so that the model can reject the target samples from unknown classes. 
+Mahsa \textit{et al.} introduce a framework \cite{PDA-fac} that factorizes the data into shared and private parts, while encouraging the shared representation to be discriminative. 
+
+Open set domain adaption is related to open set recognition. 
+The object of open set recognition is to correctly classify the samples from known classes while reject  samples from the unknown ones. 
+A method using a 1-vs-set machine \cite{scheirer2012toward} was proposed to delineate a decision space from the marginal distance. Multi-class Open set SVM \cite{OSVM} achieves to reject unknown samples by assigning probabilistic decision scores. 
+Furthermore, a method of harnessing deep neural networks \cite{bendale2016towards} was proposed to solve the problem, which introduced OpenMax layer in order to estimate the probability of an input being from an unknown class. 
+Moreover, Open-Set Neural Network \cite{junior2017nearest} extending upon the Nearest-Neighbor classifier was proposed to recognize samples from the unknown classes. 
+
+Partial domain adaption \cite{OpensetsDA} is another research topic related to open set domain adaption, which is also a general case of close set domain adaption, its objective is to transfer knowledge from a big source domain to a small target domain. 
+In the setting of partial domain adaption, source domain contains classes different from the known ones in the target domain. 
+To solve this problem, the model proposed in \cite{PartialDA-iw} re-weights the importance of the source samples with the help of an auxiliary domain discriminate. 
+Example Transfer Network \cite{Partial-ENT} improves previous work by jointly learning domain-invariant representations. 
+Selective Adversarial Networks \cite{PartialDA-san} builds domain discriminator for every class, and performs adversarial training in class-level.
+
+
+Since collecting source samples of unknown classes as \cite{OpensetsDA} does is also expensive and time-consuming, in this paper, we mainly follow the open set domain adaptation setting proposed in \cite{OpensetDA-bp}, where the target domain contains unknown class different from the known ones in the source domain. 
+

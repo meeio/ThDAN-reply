@@ -1,0 +1,150 @@
+%%
+%% Copyright 2007-2019 Elsevier Ltd
+%%
+%% This file is part of the 'Elsarticle Bundle'.
+%% ---------------------------------------------
+%%
+%% It may be distributed under the conditions of the LaTeX Project Public
+%% License, either version 1.2 of this license or (at your option) any
+%% later version.  The latest version of this license is in
+%%    http://www.latex-project.org/lppl.txt
+%% and version 1.2 or later is part of all distributions of LaTeX
+%% version 1999/12/01 or later.
+%%
+%% The list of all files belonging to the 'Elsarticle Bundle' is
+%% given in the file `manifest.txt'.
+%%
+
+%% Template article for Elsevier's document class `elsarticle'
+%% with numbered style bibliographic references
+%% SP 2008/03/01
+%%
+%%
+%%
+%% $Id: elsarticle-template-num.tex 168 2019-02-25 07:15:41Z apu.v $
+%%
+%%
+\documentclass[preprint,3p,times]{elsarticle}
+
+%% Use the option review to obtain double line spacing
+%% \documentclass[authoryear,preprint,review,12pt]{elsarticle}
+
+%% Use the options 1p,twocolumn; 3p; 3p,twocolumn; 5p; or 5p,twocolumn
+%% for a journal layout:
+%% \documentclass[final,1p,times]{elsarticle}
+%% \documentclass[final,1p,times,twocolumn]{elsarticle}
+%% \documentclass[final,3p,times]{elsarticle}
+%% \documentclass[final,3p,times,twocolumn]{elsarticle}
+%% \documentclass[final,5p,times]{elsarticle}
+%% \documentclass[final,5p,times,twocolumn]{elsarticle}
+% \usepackage[american]{babel}
+\usepackage{mdframed}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{subfig}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{dsfont}
+\usepackage{float}
+\usepackage{amsthm}
+\usepackage[normalem]{ulem}
+\usepackage[mathscr]{euscript}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\definecolor{redunknown}{RGB}{239, 68, 112}
+\definecolor{blueknown}{RGB}{38, 171, 227}
+
+\newcommand\knowncolor[1]{\textcolor{blueknown}{#1}}
+\newcommand\unknowncolor[1]{\textcolor{redunknown}{#1}}
+
+\newmdenv[
+  topline=false,
+  bottomline=false,
+  skipabove=\topsep,
+  skipbelow=\topsep,
+  leftmargin=20pt,
+  rightmargin=20pt,
+  innertopmargin=5pt,
+  innerbottommargin=5pt
+]{siderules}
+
+% \setlength{\jot}{10pt}
+
+\usepackage[ruled,norelsize]{algorithm2e}
+
+
+
+%% For including figures, graphicx.sty has been loaded in
+%% elsarticle.cls. If you prefer to use the old commands
+%% please give \usepackage{epsfig}
+
+%% The amssymb package provides various useful mathematical symbols
+\usepackage{amssymb}
+%% The amsthm package provides extended theorem environments
+%% \usepackage{amsthm}
+
+%% The lineno packages adds line numbers. Start line numbering with
+%% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
+%% for the whole article with \linenumbers.
+%% \usepackage{lineno}
+
+\makeatletter
+\renewcommand{\MaketitleBox}{%
+  \resetTitleCounters
+  \def\baselinestretch{1}%
+  \begin{center}
+    \def\baselinestretch{1}%
+    \Large \@title \par
+    \vskip 18pt
+    \normalsize \par
+    \vskip 10pt
+    \footnotesize \itshape  \par
+  \end{center}
+  \vskip 12pt
+}
+\makeatother
+
+\makeatletter
+\def\ps@pprintTitle{%
+ \let\@oddhead\@empty
+ \let\@evenhead\@empty
+ \def\@oddfoot{\centerline{\thepage}}%
+ \let\@evenfoot\@oddfoot}
+\makeatother
+
+% \setlength{\parindent}{4em}
+\setlength{\parskip}{0.8em}
+
+\begin{document}
+\begin{frontmatter}
+    \title{Reply to Editor}
+\end{frontmatter}
+
+
+%% \linenumbers
+
+%% main text
+% \section{aa}
+\input{response/to-editor.tex}
+
+% \section*{Reference}
+\bibliographystyle{elsarticle-num}
+\bibliography{./reference/ref}
+% \begin{thebibliography}{00}
+
+% %% \bibitem{label}
+% %% Text of bibliographic item
+
+% \bibitem{}
+
+% \end{thebibliography}
+\end{document}
+\endinput
+%%
+%% End of file `elsarticle-template-num.tex'.

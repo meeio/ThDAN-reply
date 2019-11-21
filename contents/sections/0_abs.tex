@@ -1,0 +1,10 @@
+Unsupervised domain adaptation (UDA) is a paradigm to tackle domain shift problem.
+Most existing methods for UDA assume source and target domains share the same label space.
+However, such assumption can hardly be verified in practice due to lack of target label information.
+More practically, target domain contains unknown class different from the known ones in the source domain, i.e., Open Set Domain Adaptation (\textit{OSDA}).
+Existing methods attempts to solve the OSDA problem by assigning smaller weights to target samples of unknown class.
+Instead of reweighting, this paper presents a novel method namely Thresholded Domain Adversarial Network (\textit{ThDAN}), which progressively selects transferable target samples to reduce the negative influence caused by unknown class in target domain.
+Based on the fact that samples from the known classes must be more transferable than target samples of the unknown one, we derive a criterion to quantify the transferability by constructing classifiers to categorize known classes and to discriminate unknown class.
+Target samples with transferability larger than an adaptive threshold are selected for domain adversarial training. 
+The adaptive threshold is calculated by averaging transferability scores of source domain samples, and tweaked progressively during the training process so that more and more target samples from the known classes can be correctly selected for adversarial training.
+Extensive experiments show that the proposed method outperforms state-of-the-art domain adaptation and open set recognition approaches on benchmark datasets.

@@ -1,0 +1,44 @@
+\makeatletter
+\newcommand{\removelatexerror}{\let\@latex@error\@gobble}
+\makeatother
+
+\begin{figure}[!t]
+    \removelatexerror
+    \begin{algorithm}[H]
+    \caption{Learning algorithm for ThDAN}
+    \KwData{
+        \\the source datasets $\{(x^i_s, y^i_s)\}_{i=1}^{n_s}$ ; 
+        \\the target datasets $\{(x^i_t)\}_{i=1}^{n_t}$.
+    }
+    \BlankLine 
+    \KwIn{
+        \\the $N_0$, $N_1$ and $N_2$ for dynamic training; 
+        \\the upper bound $\gamma_0$ of tolerable range; 
+        \\the trainable network $(G_f, G_c)$.
+    }
+    \BlankLine 
+    \KwOut{
+        \\an optimal solution $(\hat{G_f}, \hat{G_c})$.
+    }
+    \BlankLine 
+    initialization\;
+    \While{not converged}{
+        Sample mini-batch $X_s$ from $\{(x_i^s, y_i^s)\}_{i=1}^{n_s}$\;
+        Sample mini-batch $X_t$ from $\{(x_i^t)\}_{i=1}^{n_t}$\;
+        \eIf{in pretraining staget $N_0$}{
+            Update $G_f$, $G_c$ by (\ref{eq: training ThDAN class})\;
+        }
+        {
+            Calculate the $\gamma$ by (\ref{eq: dynamic tolerable range})\;
+            Calculate the \textit{transferability threshold} $\beta$ by (\ref{eq: momentum transferability baseline})\;
+            Gather mini-batch of $X_t^k$ and $X_t^u$ from $X_t$ by (\ref{eq: split target examples})\;
+            Update $G_f$, $G_c$ by (\ref{eq: training ThDAN class})\;
+            Update $G_f$, $G_c$ by (\ref{eq: training ThDAN known}, \ref{eq: ttraining ThDAN unknown})\;
+        }
+    }
+    \Return{
+        $(\hat{G_f}, \hat{G_c}) = (G_f, G_c)$
+    }  
+    \end{algorithm}
+
+\end{figure}
