@@ -1,0 +1,37 @@
+% Please add the following required packages to your document preamble:
+% \usepackage{multirow}
+
+% \newcommand\iw{0.05}
+% \newcommand\cw{0.05}
+% \renewcommand\tabularxcolumn[1]{m{#1}}
+\newcommand\emmax[1]{\textcolor{red}{\textbf{#1}}}
+\newcommand\methodyear[1]{\textcolor{blue}{#1}}
+\newcommand\Tstrut{\rule{0pt}{2.6ex}}
+\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}}
+
+\newcommand{\centeritem}[1]{\noindent\parbox[c]{\hsize}{\footnotesize \vspace*{1mm} #1 \vspace*{1mm}}}
+
+\begin{table*}[htb]
+    \renewcommand{\arraystretch}{1.3}
+    \caption{ The logical connection between paragraphs of the introduction and sentences of the abstract. }
+    \label{table: logical}
+    \centering
+    \small
+    % >{\itshape
+    \begin{tabularx}{0.95\textwidth}{c| >{\itshape}X}
+        \toprule[0.8pt]
+        \textbf{\small Paragraph of Introduction} & \multicolumn{1}{c}{\textbf{\small Sentence of Abstract}}                                                                                                                                                                                                                              \\
+        \bottomrule[0.8pt]
+        \# 1             & \centeritem{In recent years, many unsupervised domain adaptation (UDA) methods have been proposed to tackle the domain shift problem.}                                                                                                          \\
+        \hline
+        \# 2             & \centeritem{Most existing UDA methods are derived for Close Set Domain Adaptation (\textit{CSDA}) in which source and target domains are assumed to share the same label space.
+            However, target domain may contain unknown class different from the known ones in the source domain in practice, i.e., Open Set Domain Adaptation (\textit{OSDA}).}                                                                                            \\
+        \hline
+        \# 3             & \centeritem{Existing methods developed for OSDA attempt to assign smaller weights to target samples of unknown class.
+            Despite promising performance achieved by existing methods, the samples of the unknown class are still used for training, which make the model suffer from the risk of negative transfer.}                                                                     \\
+        \hline
+        \# 4             & \centeritem{Instead of reweighting, this paper presents a novel method namely Thresholded Domain Adversarial Network (\textit{ThDAN}), which progressively selects transferable target samples for distribution alignment. ......} \\
+        \bottomrule[0.8pt]
+    \end{tabularx}
+\end{table*}
+

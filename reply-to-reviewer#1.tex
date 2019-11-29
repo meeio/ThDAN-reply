@@ -53,6 +53,11 @@
 \usepackage{amsthm}
 \usepackage[normalem]{ulem}
 \usepackage[mathscr]{euscript}
+\usepackage{mathtools}
+\usepackage{enumitem}
+
+
+\newtagform{eqt}{(eqt\,}{)}
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 
 \definecolor{redunknown}{RGB}{239, 68, 112}
@@ -64,7 +69,6 @@
 % \setlength{\jot}{10pt}
 
 \usepackage[ruled,norelsize]{algorithm2e}
-
 
 
 %% For including figures, graphicx.sty has been loaded in
@@ -80,6 +84,7 @@
 %% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
 %% for the whole article with \linenumbers.
 %% \usepackage{lineno}
+\renewcommand{\theequation}{R1.\arabic{equation}}
 
 \makeatletter
 \renewcommand{\MaketitleBox}{%

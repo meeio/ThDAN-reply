@@ -94,8 +94,6 @@
 %% for the whole article with \linenumbers.
 %% \usepackage{lineno}
 
-\renewcommand{\theequation}{R1.\arabic{equation}}
-
 \makeatletter
 \renewcommand{\MaketitleBox}{%
   \resetTitleCounters
@@ -125,7 +123,7 @@
 
 \begin{document}
 \begin{frontmatter}
-    \title{Reply to Reviewer\#2}
+  \title{Author Statement}
 \end{frontmatter}
 
 \renewcommand{\figurename}[1]{Fig.#1}
@@ -133,11 +131,35 @@
 
 %% main text
 % \section{aa}
-\input{response/to-reviewer-2.tex}
+\newcommand\emmax[1]{\textcolor{red}{\textbf{#1}}}
+\newcommand\methodyear[1]{\textcolor{blue}{#1}}
+\newcommand\Tstrut{\rule{0pt}{2.6ex}}
+\newcommand\Bstrut{\rule[-0.9ex]{0pt}{0pt}}
+
+\newcommand{\centeritem}[1]{\noindent\parbox[c]{\hsize}{\footnotesize \vspace*{1mm} #1 \vspace*{1mm}}}
+
+\begin{table}[htb]
+  \renewcommand{\arraystretch}{1.3}
+  \label{table: logical}
+  \centering
+  \small
+  % >{\itshape
+  \begin{tabularx}{0.75\textwidth}{c|c}
+    \toprule[0.8pt]
+    \textbf{\small Authors } & \textbf{\small Role(s)}                                                  \\
+    \bottomrule[0.8pt]
+    Andy J.~Ma               & Project administration, Funding acquisition, Writing - Review \& Editing \\
+    Yuan Gao                 & Conceptualization, Methodology, Software, Writing - Original Draft       \\
+    Yue Gao                  & Writing - Original Draft, Formal analysis                                \\
+    Jinpeng~Wang             & Writing - Review \& Editing                                              \\
+    YoungSun Pan             & Writing - Review \& Editing                                              \\
+    \bottomrule[0.8pt]
+  \end{tabularx}
+\end{table}
 
 % \section*{Reference}
-\bibliographystyle{elsarticle-num}
-\bibliography{./reference/ref}
+% \bibliographystyle{elsarticle-num}
+% \bibliography{./reference/ref}
 % \begin{thebibliography}{00}
 
 % %% \bibitem{label}
