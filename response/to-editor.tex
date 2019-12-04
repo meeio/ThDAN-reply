@@ -8,7 +8,8 @@
 Thanks so much for your precious comments on our manuscript.
 The suggestions from the expert reviewers are of great help to improve our work.
 
-This paper is about \textit{Open Set Domain Adaptation (OSDA)}. Existing methods developed for OSDA attempt to assign smaller weights to target samples of unknown class to alleviate negative transfer.
+This paper is about \textit{Open Set Domain Adaptation (OSDA)}. 
+Existing methods developed for OSDA attempt to assign smaller weights to target samples of unknown class to alleviate negative transfer.
 Despite promising performance achieved by existing methods, the samples of the unknown class are still used for distribution alignment, which make the model suffer from the risk of the negative transfer. 
 Instead of reweighting, this paper presents a novel Thresholded Domain Adversarial Network (\textit{ThDAN}) for OSDA to progressively select transferable target samples for domain adversarial training.
 
@@ -53,26 +54,24 @@ In Section 3.1, we clarify the settings of the \textit{Open Set Domain Adaptatio
 
 
 \subsubsection*{{\textbf{Section 4. Method }}}
-We have reorganized section \textit{4. Method} and added the following subsection to clarify the proposed method and equations,
+We have reorganized Section \textit{4. Method} and added the following subsection to clarify the proposed method and equations,
 \begin{itemize}[topsep=0pt]
     \small
     \item \textit{4.1. Thresholded Domain Adversarial Network}
 \end{itemize}
-In section 4.1, we introduce the idea and training procedure of the proposed ThDAN.
+In Section 4.1, we introduce the idea and training procedure of the proposed ThDAN.
 Then, details about the transferability based sample selection algorithm used in ThDAN is given in the following subsections.
-We believe that organizing section 4 in this way can help readers better understand our work.
+We believe that organizing Section 4 in this way can help readers better understand our work.
 
 \subsubsection*{{\textbf{Section 5. Experiments}}}
-% In order to better demonstrate the performance of the proposed model, 
-To perform more comprehensive evaluation, the following modifications have been made in section \textit{5.2. Classification Results},
+To perform more comprehensive evaluation, the following modifications have been made in Section \textit{5.2. Classification Results},
 \begin{itemize}[topsep=0pt]
     \small
     \item Experiment results of recently proposed \textit{Factorized Representations for Open Set Domain Adaptation \textbf{(FRFOSDA)}} model \cite{PDA-fac} are added in sections \textit{5.2.1. Result on Office-31} and \textit{5.2.2. Result on Office-Home} for comparison.
     \item More detailed analysis of the model performance on VisDA dataset are added in section \textit{5.2.3. Result on VisDA}.
 \end{itemize}
 
-In section \textit{5.3. Analysis}, we revise the paper with the following modifications,
-% to give more analysis of the proposed model,
+In Section \textit{5.3. Analysis}, we revise the paper with the following modifications,
 \begin{itemize}[topsep=0pt]
     \small
     \item Section \textit{5.3.1 Ablation Study} is added to better understand how the proposed method performs under ablation settings.
@@ -82,6 +81,3 @@ In section \textit{5.3. Analysis}, we revise the paper with the following modifi
 
 \subsubsection*{{\textbf{Figure Caption}}}
 According to the reviewers' suggestions, the captions of Figures 1 and 7 have been modified for better understanding.
-
-
-Current work aligns the entire target domain with the source domain without excluding unknown samples, which may give rise to negative transfer due to the mismatch between unknown and known classes.

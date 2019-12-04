@@ -3,12 +3,12 @@
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for your comments and suggestions.
-$G_d$ is a binary domain identifier with all the source samples labelled as $0$ and all the target samples labelled as $1$.
+$G_d$ is a binary domain discriminator with all the source samples labelled as $0$ and all the target samples labelled as $1$.
 
-$G_d$ is an essential component in domain adversarial training.
-In the domain adversarial training, a domain discriminator is trained to separate the feature representation of the source domain from the target domain, 
-and a feature generator is trained to deceive the domain discriminator.
-Formally, the training procedure can be written as,
+$G_d$ is one of the critical components in domain adversarial training \cite{DomainAdversrialNetwork,ADDA,OpensetDA-bp}.
+The domain adversarial training aligns distributions by performing a minmax game: a domain discriminator is trained to separate the feature representation of the source domain from the one of the target domain, at the same time, feature generators are trained to deceive the domain discriminator.
+In this work, we adopt the training scheme proposed in \cite{OpensetDA-bp} to enable the domain discriminator to identify samples of unknown class for open set domain adaptation. 
+Then we can reduce the domain shift by optimizing:
 \begin{equation}
     \label{eq: training DANN}
     \begin{split}
@@ -17,18 +17,17 @@ Formally, the training procedure can be written as,
     \end{split}
 \end{equation}
 Here $p_s (x)$ and $p_t (x)$ are probability distributions of source and target data respectively.
-$G_d$ aims to label source samples as $0$ and target samples as $1$.
 $G_f^s$ and $G_f^t$ are the feature extractors for source and target samples, which share weights as in \cite{OpensetDA-bp}.
 
-To clarify how the domain discriminator $G_d$ and domain adversarial training works, we revised the manuscript by adding \textit{Section 3.2. Preliminary: Domain Adversarial Training} for better understanding.
+To clarify how the domain discriminator $G_d$ and domain adversarial training works, we revised the manuscript by adding Section \textit{3.2: Domain Adversarial Training} for better understanding.
 
 
 \section{In \textcolor{blue}{Eq.(2)}, $p_s$ and $p_t$ are probability distributions, so what do $p_s (z_t)$ and $p_t (z_t)$ mean? And why is the optimal $G_d$ this? }
 \subsection*{\underline{\textbf{Response:}}}
 
-Sorry for the misleading symbol notations. 
+Sorry for the misleading symbol notations.
 In \textcolor{blue}{Eq.(2)} of the original manuscript, the subscript of $z_t$ should be removed and $z$ is the deep feature representation of a sample, \textit{i.e.,} $z=G_f(x).$
-As stated in \textit{Section 3.1 open set domain adaptation} of the revised manuscript, $p_s (z)$ and $p_t (z)$ are probability distributions of feature representations in source and target domains respectively, as defined in \cite{PartialDA-iw}.
+As stated in \textit{Section 3.1 open set domain adaptation} in the revised manuscript, $p_s (z)$ and $p_t (z)$ are probability distributions of feature representations in source and target domains respectively, as defined in \cite{PartialDA-iw}.
 In the revised manuscript, \textcolor{blue}{Eq.(2)} is rewritten as:
 \begin{equation}
     \label{eq: revised optimal}
@@ -37,9 +36,9 @@ In the revised manuscript, \textcolor{blue}{Eq.(2)} is rewritten as:
     \end{split}
 \end{equation}
 
-Similar to \cite{goodfellow2014generative}, the proof for the property that Eq.(\ref{eq: revised optimal}) gives the optimal $G_d$ is as follows,
+Similar to \cite{goodfellow2014generative}, the proof for the property that Eq.(\ref{eq: revised optimal}) gives the optimal $G_d$ with fixed $G_f^s$ and $G_f^t$ is shown as follows,
 \begin{proof}
-    For any $G_f^s$ and $G_f^t$, we train $G_d$ to maximize Eq.(\ref{eq: training DANN}):
+    For fixed $G_f^s$ and $G_f^t$, we train $G_d$ to maximize Eq.(\ref{eq: training DANN}):
     \begin{equation}
         \label{eq: proof optimal discriminator}
         \begin{split}
@@ -49,57 +48,66 @@ Similar to \cite{goodfellow2014generative}, the proof for the property that Eq.(
               + p_s(z) \log\left(1-G_d\left(z\right)\right) \, dz.
         \end{split}
     \end{equation}
-    We take the partial differential of the objective Eq.(\ref{eq: proof optimal discriminator}) with respect to $G_d$, and apply the Leibnizs rule to exchange the order of differentiation and integration to achieve optimal $G_d$ in $[0, 1]$ at Eq.(\ref{eq: revised optimal}).
+    By taking the partial derivative of the objective Eq.(\ref{eq: proof optimal discriminator}) with respect to $G_d$ and exchanging the order of differentiation and integration with Leibnizs rule, the optimal $G_d$ is in $[0, 1]$ given by Eq.(\ref{eq: revised optimal}).
 \end{proof}
 
-The proof has been added in \textit{Section 3.2. Preliminary: Domain Adversarial Training} of the revised manuscript.
+The proof has been added in Section \textit{3.2: Domain Adversarial Training} in the revised manuscript.
 
 \section{In \textcolor{blue}{Eq.(4)} and \textcolor{blue}{Eq.(5)}, authors use the entropy of probabilities of known classes to measure the probability that the sample comes from a known class. Why do not directly use the output of $G_c$? The $K+1$ dimension of $G_c$  (i.e. $G_c^{K+1})$) seems like the same probability. }
 
 \subsection*{\underline{\textbf{Response:}}}
 
-For convenience, here we use $p_k$ to denote the probability that the sample comes from a known class . 
-As a matter of fact, we do use the output of $G_c$ to measure $p_k$ by evaluating $K+1$ dimensional output (i.e. $G_c^{K+1}$). 
-\textcolor{blue}{Eq.(3)} of the original manuscript indicates the measurement, which is as follows, 
+Thanks for your suggestion. 
+The presentation in the original manuscript may not be clear enough. 
+As a matter of fact, we have directly used the output of $G_c$ ($G_c^{K+1}$) to measure the probability that the sample comes from a known class. 
+Such probability can be interpreted as the transferability for sample selection.
+
+Due to lack of supervised signals to train a model to identify the unknown class, the output of $G_d$ is used to approximate the probability that the sample comes from the unknown class, i.e., $G_c^{K+1} = G_d$.
+In the original manuscript, \textcolor{blue}{Eq.(3)} measures the transferability (or probability of known class) by $G_d$ as follows,
 \begin{align}
     w_d(x) &= 1-G_d(z). \label{eq: domain transferability}
 \end{align}
-Here $G_d$ denotes the last dimension of $G_c$ (\textit{i.e.,} $G_d = G_c^{K+1}$). 
-The output of $G_d$ is an approximation of the probability that sample from the unknown class, since the model does not converge during training and lack of supervised information to identify the unknown class.
-Therefore $w_d$ is an approximation of $p_s$.
-In order to measure $p_s$ from a different perspective and make it more robust, we also utilize the entropy of probabilities of known classes as a measurement as indicated in \textcolor{blue}{Eq.(4)} and \textcolor{blue}{Eq.(5)}.
-These equations are respectively as follows,
+
+To increase robustness, the transferability (or probability of known class) is also computed from a different perspective. 
+Thus, the entropy of probabilities of known classes is utilized as a measurement as in \textcolor{blue}{Eq.(4)} and \textcolor{blue}{Eq.(5)}, i.e.,
 \begin{align}
     G_{c,\; known} &= softmax([G_c^1,G_c^2,...,G_c^K]).\\
     w_c(x) &= 1-H(G_{c,\; known}(z)). \label{eq: class transferability}
 \end{align}
-The intuition behind this approximation is that target samples from the known classes can be categorized by $G_{c, known}$.
-As \textit{entropy} measures the degree to which the probability of the model is spread out over different possible states, it can be used to measure the uncertainty of predictions.
-Due to the overlapping in the marginal distributions, the target samples from the known classes should be categorized by the classifier $G_c$ that trained on the source samples, leading to low entropy.
-And for samples from the unknown class, because they cannot be aligned with a specific class from the source domain, the prediction tends to be uncertain over $K$ known categories, leading to high entropy.
+The intuition behind this approximation is that samples from the known classes can be categorized correctly by $G_{c, known}$.
+As \textit{entropy} measures the degree to which the probability of the model is spread out over different possible states, it is used to measure the uncertainty of predictions.
+Due to the overlapping in the marginal distributions across domains, target samples from the known classes could be categorized correctly by the classifier $G_{c, known}$ that trained on the source samples. 
+This leads to low entropy (high transferability) for the samples from the known classes.
+For the samples from the unknown class, because they cannot be classified into one of the $K$ known classes, the uncertainty of the prediction measured by the entropy is large.
 
-In the revised manuscript, we revise \textit{Section 4.2 } to make a clearer presentation of the transferability criterion. 
+In the revised manuscript, we have modified Section \textit{4.2} to give a clearer presentation of the transferability criterion.
 
 
 \section{In \textcolor{blue}{Eq.(6)}, why is the probability of being a certain known class and the probability of being the unknown class independent? }
 \subsection*{\underline{\textbf{Response:}}}
 
-These probability can be considered independent are mainly contribute to two reasons:
-\begin{itemize}[topsep=0pt]
-    \small
-    \item The probability of being a certain known class is independent from the probability of being a certain domain.
-    \item The proposed model use the probability of being the target domain to approximate the probability of being the unknown class.
-\end{itemize}
-In the following, we give more detailed explanations.
+Thanks for your comments.
+The presentation in the original manuscript may not be precise enough. 
+As modified in the revised manuscript, the reason for \textcolor{blue}{Eq.(6)} is that Eq.(\ref{eq: domain transferability}) and Eq.(\ref{eq: class transferability}) measures the transferability from independent perspectives.
 
-In domain adaptation, the probability of being a certain known class is independent from the probability of being a certain domain.
-That is because the classifier that leverages domain-invariant features gives the probability of being a certain known class.
-The domain discriminator that leverages domain-relevant features gives the probability of from a certain domain.
-Since the classifier and domain discriminator work independently, and domain-invariant and domain-relevant can be well separated from each other \cite{DomainAgnostic}, these probabilities can be considered as independent in domain adaptation tasks.
+As we mentioned in the previous question, Eq.(\ref{eq: domain transferability}) measures the transferability by evaluating the probability of being target domain, while Eq.(\ref{eq: class transferability}) measures the transferability by evaluating the entropy of probabilities of known classes.
+In the context of domain adaptation, the domain discriminator $G_d$ delivers the probability of being the target domain by leveraging domain-relevant features, and the classifier $G_{c,\; known}$ delivers the probabilities of the known classes by leveraging domain-invariant features.
+Since the domain discriminator $G_d$ and classifier $G_{c,\; known}$ are implemented independently, and the domain-relevant and domain-invariant features can be well separated from each other by domain adversarial training \cite{DomainAgnostic}, the probabilities of known classes are independent of the probability of being the target domain.
+Therefore Eq.(\ref{eq: domain transferability}) and Eq.(\ref{eq: class transferability}) can be considered as two independent perspectives for measuring the transferability.
 
-In open set domain adaptation, we can not directly give the probability of being the unknown class due to the lack of supervised information.
-Instead, since samples from the unknown class are usually untransferable and are prone to be labeled as the target sample, we use the probability of being the target domain (\textit{i.e.,} the output of $G_c^{K+1}$) to approximate the probability of being the unknown class.
-Thus, the probability of being a certain known class and the probability of being the unknown class can be considered independent in our work.
+In the revised manuscript, we have modified Section \textit{4.2} to give a more precise explanation for \textcolor{blue}{Eq.(6)}.
+% In this work, the probability of being a certain known class and the probability of being the unknown class can be considered independent for two reasons:
+% \begin{itemize}[topsep=0pt]
+%     \small
+%     \item The probability of being a certain known class is independent of the probability of being a certain domain.
+%     \item The proposed model uses the probability of being the target domain to approximate the probability of being the unknown class.
+% \end{itemize}
+% In the following, we give a more detailed explanation.
+
+
+% In open set domain adaptation, we can not directly give the probability of being the unknown class due to the lack of supervised information.
+% Instead, since samples from the unknown class are usually untransferable and are prone to be labeled as the target samples, we use the probability of being the target domain (\textit{i.e.,} the output of $G_c^{K+1}$) to approximate the probability of being the unknown class.
+% Thus, the probability of being a certain known class and the probability of being the unknown class can be considered independent in our work.
 
 
 \section{In Fig.3, $G_fs$ for the source domain and target domain share weights.
@@ -108,10 +116,11 @@ Or are there some extra structures after $G_f$ for target domain?}
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for your precious comments.
-In this work, only one $G_f$ is used for the source domain and target domain, and there is no extra structures after $G_f$ for target domain.
-Such network designing is widely adopted in many works \cite{OpensetDA-bp,PartialDA-tf,UniversalDomainAdaptation}, and is demonstrated to be an effective way to transfer knowledge in domain adversarial training.
+In this work, $G_f^s$ and $G_f^t$ denote the feature extractors for source and target samples, respectively. They share weights as in \cite{OpensetDA-bp}, so there is no difference between them. 
+Also, there is no extra structure after $G_f^t$ for the target domain.
+Such network design has been widely adopted in existing domain adaptation works \cite{OpensetDA-bp,PartialDA-tf,UniversalDomainAdaptation}.
 
-Specifically, the domain adversarial training is as follows,
+To transfer knowledge between domains, the domain adversarial training is formulated as follows,
 \begin{equation}
     \label{eq: training DANN 1}
     \begin{split}
@@ -119,10 +128,10 @@ Specifically, the domain adversarial training is as follows,
         &+\mathbb{E}_{x\sim p_s(x)}\left[ \log \left(1-G_d\left(G_f^s\left(x\right)\right)\right) \right].
     \end{split}
 \end{equation}
-$G_f^s$ and $G_f^t$ are the feature extractors for source and target samples, which share weights as in \cite{OpensetDA-bp}.
-In the training of Eq.(\ref{eq: training DANN 1}), $G_f^t$ is confined to generate features to confuse domain discriminator for target samples.
+% $G_f^s$ and $G_f^t$ are the feature extractors for source and target samples, which share weights as in \cite{OpensetDA-bp}.
+By optimizing Eq.(\ref{eq: training DANN 1}) with fixed $G_d$, $G_f^t$ is confined to generate features to confuse the domain discriminator for target samples.
 Therefore the distribution of the target domain can be aligned with the distribution of the source domain.
-As the distribution is aligned, the classifier $G_c$ that trained with the source label information can perform well for target samples, so the knowledge learned on the source domain can be transferred to the target domain.
+As the distributions are aligned, the classifier $G_c$ trained with the source label information can perform well for target samples, so the knowledge learned on the source domain can be transferred to the target domain.
 
 
 \section{The writing could be improved, especially for some confusing description.
@@ -130,5 +139,5 @@ Some typos and grammar errors should be corrected, such as "a certain known clas
 
 \subsection*{\underline{\textbf{Response:}}}
 
-Thanks for pointing out the mistake.
-As suggested, the paper has been proofread and the language errors have been corrected in the revised manuscript.
+Thanks for your precious comments.
+As suggested, the paper has been proofread and the typos and grammar errors have been corrected in the revised manuscript.
