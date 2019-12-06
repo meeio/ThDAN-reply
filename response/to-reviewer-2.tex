@@ -4,32 +4,31 @@
 \label{Question: class number}
 \subsection*{\underline{\textbf{Response:}}}
 
-As you mentioned, it is essential to indicate the affection of proportion between the data from known and unknown classes in the setting of open set domain adaptation.
-However, in real scenarios, we can not manually set the sampling proportion due to the lack of target label information.
-During the training phase, ThDAN is confined to randomly sample training data from the target domain.
-So we conduct experiments to implicitly change the sampling proportion by varying the number of unknown data and the number of unknown classes.
-All experiments are conducted on Office-31 datasets.
-The following figures show the classification results.
+Thanks for your comments.
+In the setting of open set domain adaptation, we can not manually set the sampling proportion between the data from known and unknown classes due to the lack of target label information. 
+So the proposed model is confined to randomly sample training data from the target domain during the training phase.
+As a matter of fact, we have conducted experiments in Section \textit{5.3.4} to implicitly change this sampling proportion by varying the number of unknown samples and the number of unknown classes.
+The following figures show the classification results on Office-31 datasets.
 \input{contents/figures/FigChangeRation.tex}
 
 
-We first fix the number of unknown classes to 10, and then change the sample number of each unknown class.
-\textbf{Ratio 0.1} of sample number indicates that only one-tenth samples of each unknown class are used for training and testing, while the others are discarded from the dataset.
-\figurename{\ref{figure: ration of unknown f}} shows the result.
-When the ratio is low, the model can hardly identify samples from the unknown class due to the lack of training samples.
-On the contrary, when the ratio is high, the negative effect of the unknown class will deteriorate the accuracy of categorizing known classes. 
-Therefore the performance of the model is defective around the endpoint of the interval.
+In \figurename{\ref{figure: ration of unknown f}}, with fixed unknown classes number, we vary the number of unknown samples. 
+By \textbf{ratio 0.1} of unknown samples, it indicates that only one-tenth samples of each unknown class are used for training.
+When this ratio is low, the model can hardly identify samples from the unknown class due to the lack of training samples.
+When this ratio is high, the negative effect of the unknown class will substantially increase.
+This leads to performance degeneration of categorizing known classes. 
+As a result, the performance of the model is defective around the endpoint of the interval.
 
-We further vary the number of unknown classes in \figurename{\ref{figure: number of unknown class f}}.
-As the number of unknown classes increases, the performance of the methods proposed for close set domain adaptation will decrease significantly.
-That is because they cannot alleviate the negative transfer brought by the unknown class.
-The model proposed for open set domain adaptation would gain performance improvement by correctly rejecting samples of the unknown class.
-This is because it is easier to reject samples as the ``unknown'' than categorize samples from the diverse known classes.
-The accuracy tends to decay since too many unknown classes will deteriorate the process of knowledge transferring for the known classes.
+In \figurename{\ref{figure: number of unknown class f}}, we gradually increase the number of unknown classes.
+A noticeable performance drop can be observed for the methods proposed for close set domain adaptation.
+This is because these methods cannot alleviate the negative transfer brought by the unknown class.
+On the other hand, the models proposed for open set domain adaptation gain performance improvement by correctly rejecting samples of the unknown class.
+This is because it is easier to reject samples as the ``unknown'' than categorize samples to diverse known classes.
+The accuracy tends to decay since too many unknown classes will deteriorate the knowledge transferring for the classification task.
 
-The experiments show that the sampling proportion between the data from known and unknown classes could substantially affect model training for both unknown and known classes.
-The low proportion of samples from unknown classes will affect the ability to identify samples from the unknown class.
-On the other hand, the high proportion of that will affect the ability to classify samples from known classes.
+These two experiments show that the sampling proportion between the data from known and unknown classes could substantially affect model training for both known and unknown classes.
+Sampling too much data from the unknown class will degrade the performance of categorizing known classes.
+On the other hand, sampling too little data from the unknown class will affect the performance of rejecting the samples of unknown class.
 
 \section{From their reported results in \textcolor{blue}{Fig.7}, the adjust threshold of $\gamma_0$ is not sensitive to the accuracy of training, it is a bit strange.  
 Authors are encouraged to carefully check their claims by using more detailed reasons or more diverse data sets. }
@@ -37,18 +36,26 @@ Authors are encouraged to carefully check their claims by using more detailed re
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for your suggestions.
-In our model, the threshold is calculated by averaging the transferability score of a batch of source samples and the predefined $\gamma$ as follows,
+We have checked that the results reported in \textcolor{blue}{Fig.7} is correct.
+To better support the claim of \textcolor{blue}{Fig.7}, we provide more detailed reasons in the revised manuscript.
+
+% In experiments, we verify that the model is insensitivity to the value of $\gamma_0$ on \textbf{6 tasks of Office-31} and \textbf{12 tasks of Office-Home}.
+% We include \textcolor{blue}{Fig.7} of the original paper as follows, which shows the average prediction accuracy on these tasks when $\gamma_0$ changes,
+\textcolor{blue}{Fig.7} illustrates the average accuracy on \textbf{6 tasks of Office-31} and \textbf{12 tasks of Office-Home} when $\gamma_0$ changes.
+\input{contents/figures/FigThreshold.tex}
+
+In the proposed model, transferability threshold is calculated by averaging the transferability score of a batch of source samples and the predefined $\gamma$ as follows,
 \begin{equation}
     \label{eq: transferability thresholded}
     \beta(X_s, \gamma) = \mathbb{E}_{x \in X_s} w(x) - \gamma.
 \end{equation}
 
-Then we dynamically increase $\gamma$ from $0$ to $\gamma_0$ so that more samples can be selected for domain adversarial training.
+During training, we dynamically increase $\gamma$ from $0$ to $\gamma_0$ so that more samples can be selected for domain adversarial training.
 The changing function of $\gamma$ is as follows,
 \begin{equation}
     \label{eq: dynamic tolerable range}
     \begin{split}
-        \gamma &=
+        \gamma(n) &=
         \begin{cases}
             0 & ,\: n \in N_1 \\
             \gamma_0 \times  \sigma(n) & ,\: n\in N_2 \\
@@ -56,11 +63,7 @@ The changing function of $\gamma$ is as follows,
     \end{split}
 \end{equation}
 Here $\sigma$ is a \textit{monotonically increasing function} with an upper bound of $1$.
-$N_1$ and $N_2$ denote different training stage.
-
-In experiments, we verify that the model is insensitivity to the value of $\gamma_0$ on \textbf{6 tasks of Office-31} and \textbf{12 tasks of Office-Home}.
-We include \textcolor{blue}{Fig.7} of the original paper as follows, which shows the average prediction accuracy on these tasks when $\gamma_0$ changes,
-\input{contents/figures/FigThreshold.tex}
+% $N_1$ and $N_2$ denote different training stage.
 
 Compared with the baseline model OSBP, our model can deliver plausible results on both Office-31 and Office-Home datasets when $\gamma_0$ in the range of $[0.06, 0.5]$.
 That is because when we gradually increase the $\gamma$ during training, we also gradually decrease the learning rate.
@@ -115,18 +118,18 @@ The following Table \ref{table: logical} shows the logical connection between ea
 \label{question: transferable}
 \subsection*{\underline{\textbf{Response:}}}
 
-Unfortunately, there is no formal definition or mathematical formula to define ``transferable'' in the context of domain adaptation.
-Generally, the word ``transferable' is used to describe features.
+Unfortunately, there is no formal definition or mathematical formula to define ``transferable'' for domain adaptation.
+Generally, the word ``transferable'' is used to describe features.
 Here we quote from \cite{DeepAdaptationNetworks}:
 \begin{quote}
     \textit{the transferable features are the features that generalize well to novel tasks for domain adaption}
 \end{quote}
-While the later work \cite{TransferableAttentionDA} also uses ``transferable'' to describe samples that contribute to the transfer task of domain adaptation.
+While the later work \cite{TransferableAttentionDA} uses ``transferable'' to describe samples that contribute to the transfer task of domain adaptation.
 
-In the scenario of open set domain adaptation, we consider the target samples from the known classes are transferable samples since they can boost the classification performance of the model.
-On the contrary, the target samples from the unknown class are considered as untransferable samples, that is because aligning distribution with them will incur negative transfer.
+In the scenario of \textit{open set domain adaptation}, we consider the target samples from the known classes are transferable samples since they can boost the classification performance of the model.
+On the contrary, the target samples from the unknown class are considered as untransferable samples, this is because aligning distribution with them will incur negative transfer.
 
-In this work, we evaluate transferability based on two observations:
+The proposed method evaluates transferability from two perspectives:
 
 \textbf{Target samples from the known classes are able to confuse $G_d$.}
 Here $G_d$ is the domain discriminator that gives the probability of being target samples.

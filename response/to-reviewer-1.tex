@@ -87,27 +87,16 @@ In the revised manuscript, we have modified Section \textit{4.2} to give a clear
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for your comments.
-The presentation in the original manuscript may not be precise enough. 
-As modified in the revised manuscript, the reason for \textcolor{blue}{Eq.(6)} is that Eq.(\ref{eq: domain transferability}) and Eq.(\ref{eq: class transferability}) measures the transferability from independent perspectives.
+We notice that the phrase ``the probability of being a certain known class and the probability of being the unknown class independent'' is not precise.
+This phrase is revised as ``Eq.(\ref{eq: domain transferability}) and Eq.(\ref{eq: class transferability}) measures the transferability from independent perspectives'' for better explaining \textcolor{blue}{Eq.(6)}.
 
-As we mentioned in the previous question, Eq.(\ref{eq: domain transferability}) measures the transferability by evaluating the probability of being target domain, while Eq.(\ref{eq: class transferability}) measures the transferability by evaluating the entropy of probabilities of known classes.
-In the context of domain adaptation, the domain discriminator $G_d$ delivers the probability of being the target domain by leveraging domain-relevant features, and the classifier $G_{c,\; known}$ delivers the probabilities of the known classes by leveraging domain-invariant features.
-Since the domain discriminator $G_d$ and classifier $G_{c,\; known}$ are implemented independently, and the domain-relevant and domain-invariant features can be well separated from each other by domain adversarial training \cite{DomainAgnostic}, the probabilities of known classes are independent of the probability of being the target domain.
-Therefore Eq.(\ref{eq: domain transferability}) and Eq.(\ref{eq: class transferability}) can be considered as two independent perspectives for measuring the transferability.
+To measure the transferability, Eq.(\ref{eq: domain transferability}) and Eq.(\ref{eq: class transferability}) respectively evaluate the probability of being target domain and the entropy of probabilities of known classes.
+In the context of domain adaptation, the probability of being target domain and the probabilities of known classes are independent.
+This is because the domain discriminator $G_d$ and the classifier $G_{c,\; known}$ are implemented independently, and the domain-relevant and domain-invariant features leveraged by them can be well separated from each other by domain adversarial training \cite{DomainAgnostic}.
+Therefore Eq.(\ref{eq: domain transferability}) and Eq.(\ref{eq: class transferability}) are two independent perspectives of measuring the transferability.
 
 In the revised manuscript, we have modified Section \textit{4.2} to give a more precise explanation for \textcolor{blue}{Eq.(6)}.
-% In this work, the probability of being a certain known class and the probability of being the unknown class can be considered independent for two reasons:
-% \begin{itemize}[topsep=0pt]
-%     \small
-%     \item The probability of being a certain known class is independent of the probability of being a certain domain.
-%     \item The proposed model uses the probability of being the target domain to approximate the probability of being the unknown class.
-% \end{itemize}
-% In the following, we give a more detailed explanation.
 
-
-% In open set domain adaptation, we can not directly give the probability of being the unknown class due to the lack of supervised information.
-% Instead, since samples from the unknown class are usually untransferable and are prone to be labeled as the target samples, we use the probability of being the target domain (\textit{i.e.,} the output of $G_c^{K+1}$) to approximate the probability of being the unknown class.
-% Thus, the probability of being a certain known class and the probability of being the unknown class can be considered independent in our work.
 
 
 \section{In Fig.3, $G_fs$ for the source domain and target domain share weights.
@@ -116,7 +105,8 @@ Or are there some extra structures after $G_f$ for target domain?}
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for your precious comments.
-In this work, $G_f^s$ and $G_f^t$ denote the feature extractors for source and target samples, respectively. They share weights as in \cite{OpensetDA-bp}, so there is no difference between them. 
+In this work, $G_f^s$ and $G_f^t$ denote the feature extractors for source and target samples, respectively. 
+They share weights as in \cite{OpensetDA-bp}, so there is no difference between them. 
 Also, there is no extra structure after $G_f^t$ for the target domain.
 Such network design has been widely adopted in existing domain adaptation works \cite{OpensetDA-bp,PartialDA-tf,UniversalDomainAdaptation}.
 
