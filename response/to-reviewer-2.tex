@@ -5,52 +5,55 @@
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for your comments.
-In the setting of open set domain adaptation, we can not manually set the sampling proportion between the data from known and unknown classes due to the lack of target label information. 
-So the proposed model is confined to randomly sample training data from the target domain during the training phase.
-As a matter of fact, we have conducted experiments in Section \textit{5.3.4} to implicitly change this sampling proportion by varying the number of unknown samples and the number of unknown classes.
-The following figures show the classification results on Office-31 datasets.
+Without label information in the target domain, the sampling proportion between the data from known and unknown classes is not given in practice. 
+During training, the proposed ThDAN is set to randomly sample data from the known and unknown classes.
+Nevertheless, ThDAN can be trained under different sampling proportions.
+To evaluate how the sampling proportion between the data from known and unknown classes could affect the performance, results of different number of unknown training samples are reported in Section \textit{5.3.4}.
+% The following figures show the corresponding results on Office31 dataset (31 classes in total).
 \input{contents/figures/FigChangeRation.tex}
 
-
-In \figurename{\ref{figure: ration of unknown f}}, with fixed unknown classes number, we vary the number of unknown samples. 
-By \textbf{ratio 0.1} of unknown samples, it indicates that only one-tenth samples of each unknown class are used for training.
-When this ratio is low, the model can hardly identify samples from the unknown class due to the lack of training samples.
-When this ratio is high, the negative effect of the unknown class will substantially increase.
-This leads to performance degeneration of categorizing known classes. 
-As a result, the performance of the model is defective around the endpoint of the interval.
-
-In \figurename{\ref{figure: number of unknown class f}}, we gradually increase the number of unknown classes.
-A noticeable performance drop can be observed for the methods proposed for close set domain adaptation.
+In \figurename{\ref{figure: number of unknown class f}}, we use the first 10 classes (31 classes in total) as the known classes.
+By increasing the number of classes that are treated as the unknown, the sampling proportion for data of the unknown class increases.
+It is worth noting that the methods for close set domain adaptation will incur severe performance degradations.
 This is because these methods cannot alleviate the negative transfer brought by the unknown class.
-On the other hand, the models proposed for open set domain adaptation gain performance improvement by correctly rejecting samples of the unknown class.
-This is because it is easier to reject samples as the ``unknown'' than categorize samples to diverse known classes.
-The accuracy tends to decay since too many unknown classes will deteriorate the knowledge transferring for the classification task.
+On the contrary, the methods proposed for open set domain adaptation will gain performance improvement by correctly rejecting samples from the unknown class.
+However, threating too many classes as the unknown will deteriorate the knowledge transfer for the classification task.
+Therefore the accuracy tends to decay at the end.
 
-These two experiments show that the sampling proportion between the data from known and unknown classes could substantially affect model training for both known and unknown classes.
+In \figurename{\ref{figure: ration of unknown f}}, we use the same 10 classes as the known classes and the rest as the unknown class.
+To change the sampling proportion between the data from the known and unknown classes, we vary the ratio of used unknown samples.
+Specifically, \textbf{ratio 0.1} of used unknown samples means that for every class that is treated as the unknown, only one-tenth samples are used to train ThDAN. 
+So lowing the ratio of used unknown samples will decrease the sampling proportion for data of the unknown class.
+In this case, the models can hardly identify samples from the unknown class due to the lack of training data.
+On the other hand, when this ratio is high, the negative effect of the unknown class will substantially increase.
+This leads to performance degeneration of categorizing the known classes.
+
+The experiments above show that the sampling proportion between the data from known and unknown classes can substantially affect model performance for both the known and unknown classes.
 Sampling too much data from the unknown class will degrade the performance of categorizing known classes.
-On the other hand, sampling too little data from the unknown class will affect the performance of rejecting the samples of unknown class.
+On the other hand, sampling too little data from the unknown class will affect the performance of rejecting ``unknown''.
 
-\section{From their reported results in \textcolor{blue}{Fig.7}, the adjust threshold of $\gamma_0$ is not sensitive to the accuracy of training, it is a bit strange.  
+\section{From their reported results in \textcolor{blue}{Fig.7c}, the adjust threshold of $\gamma_0$ is not sensitive to the accuracy of training, it is a bit strange.
 Authors are encouraged to carefully check their claims by using more detailed reasons or more diverse data sets. }
 \label{Question: threshold}
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for your suggestions.
-We have checked that the results reported in \textcolor{blue}{Fig.7} is correct.
-To better support the claim of \textcolor{blue}{Fig.7}, we provide more detailed reasons in the revised manuscript.
+We have checked that the results reported in \textcolor{blue}{Fig.7c} are correct.
+In the revised manuscript, we give more detailed analysis to illustrate that the adjust threshold of $\gamma_0$ is not sensitive to the accuracy of training.
 
-% In experiments, we verify that the model is insensitivity to the value of $\gamma_0$ on \textbf{6 tasks of Office-31} and \textbf{12 tasks of Office-Home}.
-% We include \textcolor{blue}{Fig.7} of the original paper as follows, which shows the average prediction accuracy on these tasks when $\gamma_0$ changes,
-\textcolor{blue}{Fig.7} illustrates the average accuracy on \textbf{6 tasks of Office-31} and \textbf{12 tasks of Office-Home} when $\gamma_0$ changes.
+\textcolor{blue}{Fig.7c} of the original manuscript is presented as follows,
 \input{contents/figures/FigThreshold.tex}
+\newline
+\figurename{\ref{figure: analysis in question 2}} illustrates the average accuracy of \textbf{6 tasks on Office-31} and \textbf{12 tasks on Office-Home} when $\gamma_0$ changes.
+Compared with the baseline model OSBP, the proposed ThDAN can deliver considerable results on both Office-31 and Office-Home datasets in a wide range of $\gamma_0$.
 
-In the proposed model, transferability threshold is calculated by averaging the transferability score of a batch of source samples and the predefined $\gamma$ as follows,
+To select transferable target samples for domain adversarial training, a transferability threshold is adaptively computed during training,  
 \begin{equation}
     \label{eq: transferability thresholded}
     \beta(X_s, \gamma) = \mathbb{E}_{x \in X_s} w(x) - \gamma.
 \end{equation}
-
-During training, we dynamically increase $\gamma$ from $0$ to $\gamma_0$ so that more samples can be selected for domain adversarial training.
+The threshold $\beta$ is calculated by averaging the transferability score of a batch of source samples and the predefined $\gamma$.
+In the training phase, we dynamically increase $\gamma$ from $0$ to $\gamma_0$ so that more samples of known classes can be selected for domain adversarial training.
 The changing function of $\gamma$ is as follows,
 \begin{equation}
     \label{eq: dynamic tolerable range}
@@ -63,13 +66,13 @@ The changing function of $\gamma$ is as follows,
     \end{split}
 \end{equation}
 Here $\sigma$ is a \textit{monotonically increasing function} with an upper bound of $1$.
-% $N_1$ and $N_2$ denote different training stage.
 
-Compared with the baseline model OSBP, our model can deliver plausible results on both Office-31 and Office-Home datasets when $\gamma_0$ in the range of $[0.06, 0.5]$.
-That is because when we gradually increase the $\gamma$ during training, we also gradually decrease the learning rate.
-As a result, the transferable samples selected in the early stage would ``dominate'' the model training, because they engage in training sooner, and the gradient produced by them can update the model with a larger learning rate.
-As the $\gamma$ approaches $\gamma_0$, the learning rate is relatively low, and the previously selected samples would still be selected for training; therefore, the newcomers have little impact on model performance.
-This directly reflects on the insensitivity of value of $\gamma_0$ to the accuracy of training.
+It is worth noting that in the process of training, the learning rate is gradually reduced for better convergence.
+As a result, the transferable samples that are selected in the early stage would ``dominate'' the model training.
+These samples engage in training sooner, so the gradient they produce can update the model with a larger learning rate.
+As $\gamma$ approaches $\gamma_0$, the learning rate is relatively low, and the previously selected samples are likely to be selected again.
+Therefore the newcomers have little impact on the model performance.
+This directly reflects the insensitivity of value of $\gamma_0$ to classification accuracy.
 
 The above explanation has been added in the revised manuscript.
 Please refer to Section \textit{5.3.6} in the revised manuscript for details.
@@ -118,7 +121,7 @@ The following Table \ref{table: logical} shows the logical connection between ea
 \label{question: transferable}
 \subsection*{\underline{\textbf{Response:}}}
 
-Unfortunately, there is no formal definition or mathematical formula to define ``transferable'' for domain adaptation.
+Unfortunately, there is no formal definition or mathematical formula for ``transferable'' in domain adaptation.
 Generally, the word ``transferable'' is used to describe features.
 Here we quote from \cite{DeepAdaptationNetworks}:
 \begin{quote}
@@ -132,19 +135,19 @@ On the contrary, the target samples from the unknown class are considered as unt
 The proposed method evaluates transferability from two perspectives:
 
 \textbf{Target samples from the known classes are able to confuse $G_d$.}
-Here $G_d$ is the domain discriminator that gives the probability of being target samples.
+Here $G_d$ is the domain discriminator that gives the probability of being target domain.
 For a target sample, if $G_d(z)$ approaches to $1$, then the sample has a high probability of coming from the unknown class.
 That is because the unknown class is only included in the target domain and can be almost perfectly discriminated from the source samples.
 On the other hand, if $G_d(z)$ approaches to $0$, then the sample is more likely from the known classes that shared by domains.
-Therefore the transferable target samples are able to confuse $G_d$ to label them as the source samples.
-Then we can define the transferability $w_d(x)$ as inversely related to $G_d(z)$,
+So the transferable target samples are able to confuse $G_d$ to label them as the source samples.
+Therefore we can define the transferability $w_d(x)$ as inversely related to $G_d(z)$,
 \begin{align}
     w_d(x) &= 1-G_d(z). \label{eq: domain transferability}
 \end{align}
 
 \textbf{Target samples from the known classes can be categorized by $G_{c, known}$.}
-Here $G_{c, known}$ is the classifier that gives the probability distribution among known classes.
-Due to the overlapping in the marginal distributions across domains, target samples from the known classes could be categorized correctly by the classifier $G_{c, known}$ that trained on the source samples. 
+Here $G_{c, known}$ is the classifier that gives the probability distribution of known classes.
+Due to the overlapping in the marginal distributions across domains, target samples from the known classes could be categorized correctly by the classifier $G_{c, known}$ that trained on the source samples.
 This leads to low entropy (high transferability) for the samples from the known classes.
 For the samples from the unknown class, because they cannot be classified into one of the $K$ known classes, the uncertainty of the prediction measured by the entropy is large.
 Therefore the transferability $w_c(x)$ can be defined as inversely related to the \textit{normalized} classification entropy $H$,
@@ -152,31 +155,32 @@ Therefore the transferability $w_c(x)$ can be defined as inversely related to th
     w_c(x) &=1-H(G_{c,\; known}(z)). \label{eq: class transferability}
 \end{align}
 
-Since the domain discriminate $G_d$ in Eq.(\ref{eq: domain transferability}) and the classifier $G_{c, known}$ in Eq.(\ref{eq: class transferability}) work independently, we can unify the transferability criterion as,
+Since Eq.(\ref{eq: domain transferability}) and Eq.(\ref{eq: class transferability}) measure the transferability from two independent perspectives, we can unify the transferability criterions as,
 \begin{equation}
     \label{eq: transferability}
     w(x)=1-G_d(z)\cdot H(G_{c,\; known}(z)).
 \end{equation}
-The experiments in Section 4 show that the transferability criterion of Eq.(\ref{eq: transferability}) works well for our model to select target samples from the known classes.
+The experiments in Section \textit{4} show that the transferability criterion of Eq.(\ref{eq: transferability}) works well for the proposed model to select target samples from the known classes for domain adversarial training.
 
 
 \section{In \textcolor{blue}{Fig.1}, it is unclear why (d) must outperform the other methods.}
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for your comments.
-\textcolor{blue}{Fig.1} in the original manuscript is as follows,
+As a matter of fact, \textcolor{blue}{Fig.1} is used to illustrate the general idea of the proposed method.
+\textcolor{blue}{Fig.1} of the original manuscript is presented as follows,
 \input{contents/figures/overview.tex}
-
-As a matter of fact, \figurename{\ref{figure: overview}} illustrates the general idea of the proposed method.
+% \newline
 To make a clearer presentation for \figurename{\ref{figure: overview}}, we modify the caption in the revised manuscript as follows,
 \begin{siderules}
     \textit{
         \footnotesize
         The general idea of the proposed Thresholded Domain Adversarial Network (\textit{\textbf{ThDAN}}).
-        (\textbf{a}): Training samples for open set domain adaptation. 
-        (\textbf{b}): ThDAN builds a decision boundary based on the transferability threshold to separate known and unknown classes.
-        (\textbf{c}): ThDAN aligns the distributions of the source and the samples selected as known classes. Then ThDAN tweaks the transferability threshold to collect more samples of known classes to enhance distribution alignment.
-        (\textbf{d}): ThDAN progressively selects more samples of the known classes for training. All the unselected samples are rejected as ``unknown''.
+        (\textbf{a}): Training samples for open set domain adaptation.
+        (\textbf{b}): ThDAN builds a decision boundary of the transferability threshold to separate transferable and untransferable samples. 
+        (\textbf{c}): To bridge the domain gap, the transferable target samples are selected for domain adversarial training.
+        Then ThDAN tweaks the transferability threshold to collect more target samples of known classes to enhance knowledge transfer.
+        (\textbf{d}): More transferable target samples are selected for domain adversarial training. All the unselected target samples are rejected as ``unknown''
     }
 \end{siderules}
 
@@ -185,11 +189,11 @@ To make a clearer presentation for \figurename{\ref{figure: overview}}, we modif
 \subsection*{\underline{\textbf{Response:}}}
 
 In domain-invariant feature space, the source and target domains have the same (or similar) marginal distributions, and the posterior distributions of the labels are the same across domains too \cite{DeepDomainConfusion}.
-Hence, a classifier trained on the labeled source domain would likely perform well on the target domain.
+Hence, a classifier trained on the labeled source domain is likely to perform well on the target domain.
 
-Specifically, the domain-invariant features can be obtained by performing \textit{domain adversarial training} \cite{DomainAdversrialNetwork,ADDA,OpensetDA-bp}.
+Specifically, the domain-invariant features can be obtained by \textit{domain adversarial training} \cite{DomainAdversrialNetwork,ADDA,OpensetDA-bp}.
 The domain adversarial training is a minmax game: a domain discriminator is trained to separate the feature representation of the source domain from the one of the target domain, at the same time, feature generators are trained to deceive the domain discriminator.
-In this work, we adopt the training scheme proposed in \cite{OpensetDA-bp} to enable the domain discriminator to identify samples of unknown class for open set domain adaptation. 
+In this work, we adopt the training scheme proposed in \cite{OpensetDA-bp} to enable the domain discriminator to identify samples of unknown class for open set domain adaptation.
 Formally, the training procedure can be written as,
 \begin{equation}
     \label{eq: training DANN}
@@ -199,22 +203,22 @@ Formally, the training procedure can be written as,
     \end{split}
 \end{equation}
 $G_f^s$ and $G_f^t$ are the feature extractors for source and target samples, which share weights as in \cite{OpensetDA-bp}.
-$G_d$ aims to label source samples as $0$ and target samples as $1$.
-The optimization of Eq.(\ref{eq: training DANN}) makes $G_f$ to generate features that can not be discriminated by $G_d$ (\textit{i.e.,} domain-invariant features).
-Therefore the classifier $G_c$ that trained on the source domain can perform well for target samples by leveraging features extracted by $G_f$.
+$G_d$ is a binary domain discriminator with all the source samples labelled as $0$ and all the target samples labelled as $1$.
+By optimizing Eq.(\ref{eq: training DANN}) with fixed $G_d$, $G_f^t$ is confined to generate features that can not be discriminated by $G_d$ (\textit{i.e.} domain-invariant features).
+Therefore the classifier $G_c$ that trained on the source domain can perform well for target samples.
 
 \section{In the related work, CSDA does not have references.}
 \subsection*{\underline{\textbf{Response:}}}
 Thanks for your suggestion.
 CSDA is referred to Close Set Domain Adaptation and we have add references \cite{ben2010theory,Elsevier-DeepVisualDA,TransferLearningSurvey} for the methods for CSDA in the revised manuscript.
 
-\section{In section 2.1, "Another way to solve domain adaptation" is not suitable. 
-Domain adaptation is a setting in detailed ML tasks or a probability distribution issue. 
+\section{In section 2.1, "Another way to solve domain adaptation" is not suitable.
+Domain adaptation is a setting in detailed ML tasks or a probability distribution issue.
 Authors can obtain more information from S Ben-David's paper.}
 \subsection*{\underline{\textbf{Response:}}}
 Thanks for your comment.
-We agree that the phrase ``Another way to solve domain adaptation'' is not precise. 
-This phrase is revised as ``Another approach for domain adaptation''. 
+We agree that the phrase ``Another way to solve domain adaptation'' is not precise.
+This phrase is revised as ``Another approach for domain adaptation''.
 Similar unprecise wordings have been modified in the revised manuscript.
 Also, we have carefully read Ben-David's paper \cite{ben2010theory} to get a better understanding of domain adaptation and has cited this paper in the revised manuscript.
 
@@ -232,9 +236,10 @@ Please refer to Section 4 for more details.
 Yes, $C_t$ is the label space of target domain.
 In the revised manuscript, the definition on $C_t$ has been added in section \textit{3.1 open set domain adaptation} as follows,
 \begin{siderules}
-$C_s$ and $C_t$ respectively denote the label space of the source and target domain.
-In the setting of open set domain adaptation, the label space of target domain contains the label space of source domain, \textit{i.e.}, $C_s \subset C_t$. 
-We refer to classes from from $C_s$ as the known classes and classes from $C_t\backslash C_s$ as the unknown class.
+\small
+$C_s$ and $C_t$ denote the label space of the source and target domain, respectively.
+In the setting of open set domain adaptation, the label space of target domain contains the label space of source domain, \textit{i.e.}, $C_s \subset C_t$.
+We refer to classes from $C_s$ as the known classes and classes from $C_t\backslash C_s$ as the unknown class.
 \end{siderules}
 
 
@@ -250,33 +255,34 @@ The proposed method selects untransferable samples by evaluating transferability
         X_t^u=\{x|w(x) < \beta, x \in X_t \}.
     \end{split}
 \end{equation}
-The $w$ is transferability calculator in Eq.(\ref{eq: transferability}), and $\beta$ is transferability threshold calculated by averaging and tweaking transferability scores of source samples.
-The selection procedure indicated in Eq.(\ref{eq: split target examples untrnasferable}) shows that target samples  $X_t$ whose transferability smaller than the threshold will be selected as untransferable target samples $X_t^u$. 
+Here $w$ is transferability calculator of Eq.(\ref{eq: transferability}).
+To select untransferable samples from a batch of target data $X_t$, a transferability threshold $\beta$ is computed by Eq.(\ref{eq: transferability thresholded}).
+Then samples from $X_t$ whose transferability score $w(x)$ less than the threshold $\beta$ will be selected as untransferable samples, denoted as $X_t^u$.
 
 \section{In \textcolor{blue}{Eq.(2)}, more strong reasons need to be presented to explain the $G_f$ and $G_d$. Why the use such settings to define them? Only based other's work?}
 \subsection*{\underline{\textbf{Response:}}}
 
-Thanks for your comments.
-The reason why we use the setting ``{$G_f$ and $G_d$ can be considered as the generative network and discriminate network of GAN respectively'' to define $G_f$ and $G_d$ in \textcolor{blue}{Eq.(2)} is that the \textit{domain adversarial training} between $G_f$ and $G_d$ is similar to the original training procedure of \textit{Generative Adversarial Nets (GAN)} \cite{goodfellow2014generative}.
-In GAN, the discriminate network $D$ and the generative network $G$ are trained with the following objective, 
+The reason why we use the setting ``$G_f$ and $G_d$ can be considered as the generative network and discriminate network of GAN respectively'' to define them in \textcolor{blue}{Eq.(2)} is that the domain adversarial training between $G_f$ and $G_d$ is similar to the training procedure of the original \textit{Generative Adversarial Nets (GAN)} \cite{goodfellow2014generative}.
+
+In GAN, the \textit{discriminate network} $D$ and the \textit{generative network} $G$ are trained with the following objective,
 \begin{equation}
     \label{eq: GAN}
     \begin{split}
-        \min_G \max_D V(D,G) &= \mathbb{E}_{x\sim p_{data}(x)}[\log D(x)] \\ &+ \mathbb{E}_{z\sim p_z(z)}[\log (1-D(G(z)))]. 
+        \min_G \max_D V(D,G) &= \mathbb{E}_{x\sim p_{data}(x)}[\log D(x)] \\ &+ \mathbb{E}_{z\sim p_z(z)}[\log (1-D(G(z)))].
     \end{split}
 \end{equation}
-In the training of GAN of Eq.(\ref{eq: GAN}), $D$ is trained to separate the feature representation of the true images and fake images, and $G$ is trained to generate fake images that can confuse $D$.
-While in the domain adversarial training of Eq.(\ref{eq: training DANN}), $G_d$ is trained to separate the feature representation of the source domain from the target domain, and $G_f$ is trained to generated target features that are able to confuse $G_d$.
-The training procedure for $D$ and $G$ is very similar to the domain adversarial training for $G_d$ and $G_f$. 
+In the learning framework of GAN, $D$ is trained to separate the feature representation of the true images and fake images, and $G$ is trained to generate fake images that can confuse $D$.
+While in the domain adversarial training of Eq.(\ref{eq: training DANN}), $G_d$ is trained to separate the feature representation of the source domain from the target domain, and $G_f$ ($G_f^t$) is trained to generated target features that are able to confuse $G_d$.
+The training procedure for $D$ and $G$ is very similar to the domain adversarial training for $G_d$ and $G_f$.
 Therefore we can define $G_f$ and $G_d$ by the setting of GAN.
 
-We think this setting is not convincing enough to explain why \textcolor{blue}{Eq.(2)} is the optimal $G_d$, and have removed it in the revised manuscript.
-We have added more formal proof for Eq.(\ref{eq: revised optimal}) in the revised manuscript, please refer to the reply of the next question for details.
+To better explain why \textcolor{blue}{Eq.(2)} gives the optimal $G_d$, we have removed this phrase and added more formal proof in the revised manuscript.
+Please refer to the reply of the next question for details.
 
 \section{In the following, why does $G_d$ converge to the optimal?}
 \subsection*{\underline{\textbf{Response:}}}
 
-\textcolor{blue}{Eq.(2)} is as follows,
+\textcolor{blue}{Eq.(2)} in the revised manuscript is as follows,
 \begin{equation}
     \label{eq: revised optimal}
     \begin{split}
@@ -292,7 +298,7 @@ We give the proof that Eq.(\ref{eq: revised optimal}) is the optimal $G_d$ for E
         \label{eq: proof optimal discriminator}
         \begin{split}
             \max_{G_d} \mathscr{L}(G_d,G^{s}_{f},G_f^t)  = &\int_x p_t(x)\log \left(G_d\left(G_f^t\left(x\right)\right)\right)
-              + p_s(x) \log\left(1-G_d\left(G_f^s\left(x\right)\right)\right) \, dx.
+              + p_s(x) \log\left(1-G_d\left(G_f^s\left(x\right)\right)\right) \, dx
             \\ = &\int_z p_t(z)\log \left(G_d\left(z\right)\right)
               + p_s(z) \log\left(1-G_d\left(z\right)\right) \, dz.
         \end{split}
@@ -305,7 +311,7 @@ The proof has been added in Section 3.2 of the revised manuscript.
 \section{In \textcolor{blue}{Eq.(2)}, how to define $p_s$ and $p_t$?}
 \subsection*{\underline{\textbf{Response:}}}
 
-\textcolor{blue}{Eq.(2)} is as follows,
+\textcolor{blue}{Eq.(2)} in the revised manuscript is as follows,
 \begin{equation}
     \label{eq: revised optimal 1}
     \begin{split}
@@ -320,7 +326,8 @@ As stated in \textit{Section 3.1 open set domain adaptation} of the revised manu
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for your comments.
-The \textcolor{blue}{Eq.(9)} in the original manuscript is as follows,
+$X_t^k$ and $X_t^k$ respectively denote the transferable and untransferable samples split from a batch of target samples $X_t$.
+\textcolor{blue}{Eq.(9)} of the original manuscript indicates the process,
 \begin{equation}
     \label{eq: split target examples}
     \begin{split}
@@ -328,20 +335,18 @@ The \textcolor{blue}{Eq.(9)} in the original manuscript is as follows,
         X_t^u=\{x|w(x) < \beta, x \in X_t \}.
     \end{split}
 \end{equation}
-Here $X_t^k$ denotes the transferable target samples that are selected as the samples from the known classes.
-And $X_t^u$ denotes the untransferable target samples that are regarded as the samples from the unknown class.
-Specifically, in Eq.(\ref{eq: split target examples}), $\beta$ is a transferability threshold, $w$ is the transferability calculator.
-For a batch of target training data $X_t$, we use the threshold $\beta$ to split it into two parts, $X_t^k$ and $X_t^u$.
-For target samples in $X_t^k$, we train the model to align distribution with the source samples.
-For target samples in $X_t^k$, we train the $G_d$ to identify them as ``unknown'' samples.
+Here $w$ is the transferability calculator defined in Eq.(\ref{eq: transferability}).
+A transferability threshold $\beta$ is computed by Eq.(\ref{eq: transferability thresholded}) to split a batch of target training data $X_t$ into two parts, \textit{i.e.,} $X_t^k$ and $X_t^u$.
+Specifically, $X_t^k$ denotes the transferable target samples, which will be selected for domain adversarial training.
+While $X_t^u$ denotes the untransferable target samples, which the model learns to identify as ``unknown''.
 
-We added Section 4.1 in the revised manuscript to clarify the proposed methods and equations, in which $X_t^k$ and $X_t^u$ are explained.
+We add Section \textit{4.1} in the revised manuscript to clarify the proposed methods and equations, in which $X_t^k$ and $X_t^u$ are explained.
 
 \section{A same controversial issue appears again: Sample selection is the key step for this model to address open set domain adaptation.}
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for pointing out the mistakes.
-This sentence has been modified as ``The sample selection algorithm will substantially affect the performance of ThDAN for open set domain adaptation'' 
+This sentence has been modified as ``The sample selection algorithm will substantially affect the performance of ThDAN for open set domain adaptation''
 
 Similar mistakes have bee corrected in the revised manuscript.
 
@@ -350,11 +355,11 @@ Similar mistakes have bee corrected in the revised manuscript.
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for your suggestions.
-We want to use different settings to perform ablation studies to evaluate the efficacy of the threshold tweaking techniques proposed in Section 4.5.
-The ablation studies on Office-31, OfficeHome and VisDA datasets involve 3 kinds of ThDAN variants.
-(\textbf{1}) \textit{\textbf{ThDAN-m-dy}} is the original setting which calculates transferability threshold based on mini-batch samples and a fixed $\gamma$.
-(\textbf{2}) \textit{\textbf{ThDAN-dy}} is the variant applies exponential moving average to update transferability threshold.
-(\textbf{3}) \textit{\textbf{ThDAN}} further takes advantage of dynamic $\gamma$ to tweak transferability threshold.
+To evaluate the efficacy of the threshold tweaking techniques proposed for ThDAN, ablation studies on Office-31, OfficeHome and VisDA datasets are reported in Section \textit{4.2.1} and \textit{4.2.2}.
+The ablation studies involve 3 kinds of ThDAN variants:
+(\textbf{1}) \textit{\textbf{ThDAN-m-dy}} is the original setting that calculates the transferability threshold based on mini-batch samples and a fixed $\gamma$.
+(\textbf{2}) \textit{\textbf{ThDAN-dy}} is the variant that applies exponential moving average to update the transferability threshold.
+(\textbf{3}) \textit{\textbf{ThDAN}} further takes advantage of dynamic $\gamma$ to tweak the transferability threshold.
 
 In order to better understand how the proposed method performs under ablation settings, we add Section \textit{5.3.1 Ablation Study} in the revised manuscript.
 Please refer to the revised manuscript for details.
@@ -363,24 +368,23 @@ Please refer to the revised manuscript for details.
 \section{A same issue appear again in the settings of Section 4.2.2.}
 \subsection*{\underline{\textbf{Response:}}}
 
-Thanks for your comments.
-This question is related to the previous question.
-In the revised manuscript, the ablation study in the original \textcolor{blue}{Section 4.2.2} has been reorganized in \textit{Section 5.3.1 Ablation Study}.
+Thanks for your reminding.
+The ablation analysis in the original \textcolor{blue}{Section 4.2.2} has been reorganized in Section \textit{5.3.1 Ablation Study} of the revised manuscript.
 
 
 \section{The results analysis in Section 4.2.3 is unclear. More detailed reasons need to be present to support your conclusion.}
 \subsection*{\underline{\textbf{Response:}}}
 
-The results of \textcolor{blue}{Section 4.2.3} are as follows,
+The results of \textcolor{blue}{Section 4.2.3} are presented as follows,
 \input{contents/tables/visda.tex}
 
-In the experiments of VisDA, the training split is used as the source domain and validation one as the target domain.
+In the experiments on VisDA, the \textit{training} split is used as the source domain and the \textit{validation} one as the target domain.
 We choose 6 categories, i.e., bicycle, bus, car, motorcycle, train and truck as the known classes, and the other 6 categories as the unknown class.
-As Table. \ref{table: exp on visDA} shows the classification results, where \textit{Avg.All} and \textit{Avg.Known} indicate the accuracy averaged over all classes and known classes.
-For the classification of known classes, ThDAN can exceed other methods in almost every class and in the average, which means our method can effetely transfer knowledge for the classification task.
-This is because ThDAN can avoid the negative transfer by only selecting transferable target samples for domain adversarial training.
-Also, our model improves the classification accuracy for the unknown class by a big margin.
-This further verifies the efficiency of the sample selection algorithm, since ThDAN will reject the unselected samples as the unknown class.
+The classification results are shown in Table \ref{table: exp on visDA}, where \textit{Avg.All} and \textit{Avg.Known} indicate the accuracy averaged over all classes and the known classes, respectively.
+For the classification for known classes, the proposed ThDAN can exceed other methods in almost every class and in the average, which means our method can effetely transfer knowledge for the adaptation task.
+This is because ThDAN avoids the negative transfer by aligning distributions with target samples of high transferability.
+Also, ThDAN improves the discrimination accuracy for the unknown class by a big margin.
+This further verifies the efficiency of the sample selection algorithm, since ThDAN is learnt to reject the unselected samples as ``unknown''.
 
 The analysis mentioned above has been added to the corresponding section in the revised manuscript.
 
@@ -388,28 +392,15 @@ The analysis mentioned above has been added to the corresponding section in the 
 \subsection*{\underline{\textbf{Response:}}}
 
 Thanks for your reminding.
-The \textcolor{blue}{Fig.7} in the original manuscript is as follows,
+\textcolor{blue}{Fig.7} of the original manuscript is included as follows,
 \input{contents/figures/FigAnalysis_2.tex}
 
-In the revised manuscript, the claim of \figurename{\ref{figure: analysis}} is modified for clearer representation.
-The rewritten claim has been stated in the previous questions:
+In the revised manuscript, the claims of \figurename{\ref{figure: analysis}} are modified for clearer representation.
+The rewritten claims have been stated in the previous replies:
 \begin{itemize}
-    \item  In \textbf{Question \ref{Question: class number}}, we modify the claim of \figurename{\ref{figure: ration of unknown}} and \ref{figure: number of unknown class} by adding more analysis to explain how the performance changes with different sampling proportions between the data from known and unknown classes. 
-    \item In \textbf{Question \ref{Question: threshold}}, we modify the claim of \figurename{\ref{figure: changing of sigma}} by providing a more detailed analysis on why the proposed method is insensitive to the setting of $\gamma_0$. 
+    \item  In the reply of \textbf{Question \ref{Question: class number}}, we modify the claims of \figurename{\ref{figure: ration of unknown}} and \figurename{\ref{figure: number of unknown class}} by adding more analysis to explain how the sampling proportion between the data from known and unknown classes could affect the performance.
+    \item In the reply of \textbf{Question \ref{Question: threshold}}, we modify the claims of \figurename{\ref{figure: changing of sigma}} by providing a more detailed analysis on why the proposed method is insensitive to the setting of $\gamma_0$.
 \end{itemize}
-
-
-% \begin{siderules}
-%     \textit{
-%         \footnotesize
-%         (\textbf{a}):
-%         The prediction accuracy of ThDAN when we changed the ratio of unknown samples in the adaptation task \textit{A$\to$D}.
-%         (\textbf{b}):
-%         The prediction accuracy of ThDAN when we changed the number of unknown classes in the adaptation task \textit{A$\to$W}.
-%         (\textbf{c}): The prediction accuracy of ThDAN when we change the value of $\sigma_0$ on dataset Office-31 and Office-Home.
-%     }
-% \end{siderules}
-
 
 \section{Some equations missed ``,'' or ``.'' at their ends.}
 \subsection*{\underline{\textbf{Response:}}}
