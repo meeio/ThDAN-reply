@@ -1,19 +1,20 @@
 \begin{figure*}[htb]
     \centering
-    \subfloat[\footnotesize Accury \textit{w.r.t.} number of classes that are treated as the unknown]{
-        \includegraphics[width=0.33\textwidth]{contents/figures/pdf/analysis/class_change.pdf} 
+    \subfloat[\footnotesize Accury \textit{w.r.t.} the number of classes that are treated as the unknown class]{
+        \includegraphics[width=0.32\textwidth]{contents/figures/pdf/analysis/class_change.pdf} 
         \label{figure: number of unknown class f}
     }
-    \subfloat[\footnotesize Accury \textit{w.r.t.} ratio of used unknown samples]{
-        \includegraphics[width=0.34\textwidth]{contents/figures/pdf/analysis/nuknown_change.pdf} 
+    \hspace{5mm}
+    \subfloat[\footnotesize Accury \textit{w.r.t.} the ratio of data used in unknown class]{
+        \includegraphics[width=0.32\textwidth]{contents/figures/pdf/analysis/nuknown_change.pdf} 
         \label{figure: ration of unknown f}
     } 
     \\
     \caption{
         (\textbf{a}): 
-        The accuracy when we change the ratio of unknown samples in the adaptation task \textit{A$\to$D}. 
-        (\textbf{b}): 
         The accuracy when we change the number of classes that are treated as the unknown in the adaptation task \textit{A$\to$W}. 
+        (\textbf{b}): 
+        The accuracy when we change the ratio of data used in unknown class in the adaptation task \textit{A$\to$D}. 
     }
     \label{figure: analysis change ratio}
 \end{figure*}
